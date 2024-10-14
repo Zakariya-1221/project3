@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Grades</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Grades</h1>
+    <div id="output"></div>
+    <style>
+        button {
+            padding: 10px, 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            text-align: center;
+            background-color: #b30000;
+            height: 50px;
+            width: 150px;
+            color: white;
+            top: 150px;
+        }
+    </style>
+    <script>
+        async function getGrades() {
+            try {
+                const response = await fetch('/gradedata'); // Fetch data from the server
+                const data = await response.json(); // Parse the JSON data
+                const output = document.getElementById('output'); // Get the output element
+                
+                output.innerHTML = ''; // Clear the output
+                // Create a table
+                const table = document.createElement('table'); 
+                // Create table headers
+                const tableHeader = document.createElement('tr');
+                const headers = ['ID', 'Name', 'Age']; // Adjusted headers based on the data structure
+                headers.forEach(hText => {
+                    const tHeader = document.createElement('th'); // Create a table header element
+                    tHeader.textContent = hText; // Set the text content of the header
+                    tableHeader.appendChild(tHeader); // Append the header to the header row
+                });
+                table.appendChild(tableHeader); // Append the header row to the table
+                
+                // Loop through the data
+                data.forEach(item => {
+                    const row = document.createElement('tr'); // Create a table row
+                    const cells = [item.id, item.name, item.age]; // Use the correct properties based on the sample data
+                    cells.forEach(cellText => {
+                        const cell = document.createElement('td');
+                        cell.textContent = cellText;
+                        row.appendChild(cell);
+                    });
+                    table.appendChild(row); // Append the row to the table
+                });
+                output.appendChild(table); // Append the table to the output element
+
+            } catch (error) {
+                console.log(error);
+                console.error('Error fetching data', error);
+            }
+        }
+
+        // Automatically fetch grades when the page loads
+        window.onload = getGrades; 
+    </script>
+    <button onclick="window.location.href='/'">Main Menu</button>
+</body>
+</html>
