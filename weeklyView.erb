@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Assignments</title>
+    <script src="https:#cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <style>
+        /* Styles for layout and appearance */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .week-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .week-nav button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        .day {
+            border: 1px solid #ddd;
+            padding: 10px;
+            min-height: 100px;
+            background-color: #fff;
+        }
+        .day-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+        }
+        .assignment {
+            background-color: #e9f5e9;
+            border-left: 3px solid #4CAF50;
+            padding: 5px;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weekly Assignments</h1>
+        <div class="week-nav">
+            <button id="prevWeek">&lt; Previous Week</button>
+            <span id="currentWeek"></span>
+            <button id="nextWeek">Next Week &gt;</button>
+        </div>
+        <div class="week-grid" id="weekGrid"></div>
+    </div>
+
+    <script>
+        # Initialize current date using Moment.js
+        let currentDate = moment();
+
+        # Update week display in navigation
+        function updateWeekDisplay() {
+            const weekStart = currentDate.clone().startOf('week');
+            const weekEnd = currentDate.clone().endOf('week');
+            document.getElementById('currentWeek').textContent = `${weekStart.format('MMM D, YYYY')} - ${weekEnd.format('MMM D, YYYY')}`;
+        }
+
+        # Create grid for weekly view
+        function createWeekGrid() {
+            const grid = document.getElementById('weekGrid');
+            grid.innerHTML = '';
+            const weekStart = currentDate.clone().startOf('week');
+
+            for (let i = 0; i < 7; i++) {
+                const day = weekStart.clone().add(i, 'days');
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.innerHTML = `
+                    <div class="day-header">${day.format('ddd, MMM D')}</div>
+                    <div class="day-assignments" id="day-${day.format('YYYY-MM-DD')}"></div>
+                `;
+                grid.appendChild(dayElement);
+            }
+        }
+
+        # Display assignments in the grid
+        function displayAssignments(assignments) {
+            assignments.forEach(course => {
+                course.assignments.forEach(assignment => {
+                    const dueDate = moment(assignment.due_at);
+                    if (dueDate.isSame(currentDate, 'week')) {
+                        const dayElement = document.getElementById(`day-${dueDate.format('YYYY-MM-DD')}`);
+                        if (dayElement) {
+                            const assignmentElement = document.createElement('div');
+                            assignmentElement.className = 'assignment';
+                            assignmentElement.textContent = `${course.name}: ${assignment.name}`;
+                            dayElement.appendChild(assignmentElement);
+                        }
+                    }
+                });
+            });
+        }
+
+        #Fetch assignments and update display
+        function fetchAndDisplayAssignments() {
+            fetch('/assignments')
+                .then(response => response.json())
+                .then(data => {
+                    createWeekGrid();
+                    displayAssignments(data);
+                })
+                .catch(error => console.error('Error fetching assignments:', error));
+        }
+
+        #Event listeners for navigation buttons
+        document.getElementById('prevWeek').addEventListener('click', () => {
+            currentDate.subtract(1, 'week');
+            updateWeekDisplay();
+            fetchAndDisplayAssignments();
+        });
+
+        document.getElementById('nextWeek').addEventListener('click', () => {
+            currentDate.add(1, 'week');
+            updateWeekDisplay();
+            fetchAndDisplayAssignments();
+        });
+
+        #Initial setup
+        updateWeekDisplay();
+        fetchAndDisplayAssignments();
+    </script>
+</body>
+</html>
