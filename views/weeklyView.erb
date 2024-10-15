@@ -33,7 +33,7 @@
             margin-bottom: 20px;
         }
         .week-nav button {
-            background-color: #4CAF50;
+            background-color: #b30000;
             color: white;
             border: none;
             padding: 10px 15px;
@@ -45,6 +45,19 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        button {
+            padding: 10px, 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            text-align: center;
+            background-color: #b30000;
+            height: 50px;
+            width: 150px;
+            color: white;
+            top: 150px;
+        }
+        
         .week-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -158,5 +171,6 @@
         updateWeekDisplay();
         fetchAndDisplayAssignments();
     </script>
+    <button onclick="window.location.href='/'">Main Menu</button>
 </body>
 </html>

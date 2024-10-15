@@ -114,7 +114,7 @@ get '/grades.html' do
 end
 
 
-get '/weekly' do
+get '/weeklyView' do
   erb :weeklyView
 end
 
