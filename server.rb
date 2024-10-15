@@ -53,6 +53,7 @@ def get_upcoming_assignments(course_id)
 end
 
 
+
 # Fetch the gradebook for a specific course
 def get_gradebook_day(course_id)
     response = HTTParty.get("#{BASE_URL}/courses/#{course_id}/gradebook_history/days", headers: { "Authorization" => "Bearer #{ACCESS_TOKEN}" })
@@ -65,19 +66,7 @@ def get_gradebook_day(course_id)
     end
 end
   
-  # Fetch the blackout_dates for a specific course
-def get_blackout_date(course_id)
-    response = HTTParty.get("#{BASE_URL}/courses/#{course_id}/blackout_dates", headers: { "Authorization" => "Bearer #{ACCESS_TOKEN}" })
-    if response.code == 200
-      blackout_dates = JSON.parse(response.body)
-      return blackout_dates
-    else
-      puts "Failed to retrieve data: #{response.code}"
-      []
-    end
-end
   
-
 # Route to serve the assignments data
 get '/assignments' do
   content_type :json
@@ -120,14 +109,16 @@ get '/' do
   send_file 'index.html'
 end
 
-get '/weeklyView' do 
-  erb :weeklyView
-end
-
 get '/grades.html' do
   send_file 'grades.html'
 end
 
 
+get '/weekly' do
+  erb :weeklyView
+end
+
+
 # Start the Sinatra application
 set :port, 4567  # Change this to your preferred port
+
