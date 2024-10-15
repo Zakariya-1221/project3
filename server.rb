@@ -65,10 +65,10 @@ get '/assignments' do
   courses_with_assignments.to_json
 end
 
-# Serve the HTML page
-get '/' do
-  send_file 'index.html'
+get '/weekly' do
+  erb :weeklyView
 end
+
 
 # Start the Sinatra application
 set :port, 4567  # Change this to your preferred port

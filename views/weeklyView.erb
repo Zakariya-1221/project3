@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekly Assignments</title>
-    <script src="https:#cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <style>
         /* Styles for layout and appearance */
         body {
@@ -84,17 +84,17 @@
     </div>
 
     <script>
-        # Initialize current date using Moment.js
+        // Initialize current date using Moment.js
         let currentDate = moment();
 
-        # Update week display in navigation
+        // Update week display in navigation
         function updateWeekDisplay() {
             const weekStart = currentDate.clone().startOf('week');
             const weekEnd = currentDate.clone().endOf('week');
             document.getElementById('currentWeek').textContent = `${weekStart.format('MMM D, YYYY')} - ${weekEnd.format('MMM D, YYYY')}`;
         }
 
-        # Create grid for weekly view
+        // Create grid for weekly view
         function createWeekGrid() {
             const grid = document.getElementById('weekGrid');
             grid.innerHTML = '';
@@ -112,7 +112,7 @@
             }
         }
 
-        # Display assignments in the grid
+        // Display assignments in the grid
         function displayAssignments(assignments) {
             assignments.forEach(course => {
                 course.assignments.forEach(assignment => {
@@ -130,9 +130,9 @@
             });
         }
 
-        #Fetch assignments and update display
+        //Fetch assignments and update display
         function fetchAndDisplayAssignments() {
-            fetch('/assignments')
+            fetch('http://localhost:4567/assignments')
                 .then(response => response.json())
                 .then(data => {
                     createWeekGrid();
@@ -141,7 +141,7 @@
                 .catch(error => console.error('Error fetching assignments:', error));
         }
 
-        #Event listeners for navigation buttons
+        //Event listeners for navigation buttons
         document.getElementById('prevWeek').addEventListener('click', () => {
             currentDate.subtract(1, 'week');
             updateWeekDisplay();
@@ -154,7 +154,7 @@
             fetchAndDisplayAssignments();
         });
 
-        #Initial setup
+        //Initial setup
         updateWeekDisplay();
         fetchAndDisplayAssignments();
     </script>
